@@ -17,11 +17,14 @@ public class animeRest {
     @Autowired
     private animeRepo animeRepo;
 
+    //Todos los animes
     @GetMapping
     public List<animeModel> getanimeModels() {
         return animeRepo.findAll();
     }
 
+
+    //Animes por id
     @GetMapping("/{id}")
     public ResponseEntity<animeModel> getanimeModelById(@PathVariable String id) {
         return animeRepo.findById(id)
@@ -29,6 +32,7 @@ public class animeRest {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    //Animes por título
     @GetMapping("/titulo/{titulo}")
     public ResponseEntity<List<animeModel>> getanimeModelsByTitulo(@PathVariable String titulo) {
         List<animeModel> list = animeRepo.findByTituloContainingIgnoreCase(titulo);
@@ -40,14 +44,15 @@ public class animeRest {
         }
     }
 
-
-    @PostMapping
+    //Crear un nuevo anime
+    @PostMapping("/newAnime")
     public ResponseEntity<animeModel> createanimeModel(@RequestBody animeModel anime) {
         animeModel nuevoAnime = animeRepo.save(anime);
         return new ResponseEntity<>(nuevoAnime, HttpStatus.CREATED);
     }
 
-    @PutMapping ("/{id}")
+    //Actualizar un nuevo anime por id
+    @PutMapping ("/newAnime/{id}")
     public ResponseEntity<animeModel> updateAnime(@PathVariable String id, @RequestBody animeModel animeDetails) {
         return animeRepo.findById(id)
                 .map(anime -> {
@@ -63,7 +68,9 @@ public class animeRest {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/titulo/{titulo}")
+
+    //Eliminar animes por nombre
+    @DeleteMapping("/bye/titulo/{titulo}")
     public ResponseEntity<Void> deleteByTitulo(@PathVariable String titulo) {
         List<animeModel> animesToDelete = animeRepo.findByTituloContainingIgnoreCase(titulo);
         if(animesToDelete.isEmpty()){
@@ -73,7 +80,8 @@ public class animeRest {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
+    //Eliminar anime por ID
+    @DeleteMapping("/bye/{id}")
     public ResponseEntity<Void> deleteAnime(@PathVariable String id) {
         if (animeRepo.existsById(id)) {
             animeRepo.deleteById(id);
