@@ -12,13 +12,6 @@ public class NovelApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NovelApplication.class, args);
 
-        novels novel1 = new novels("Solo Leveling", "Chugong", "D&C Media", 2016, "Acción", "Unkwon", 270 );
-        publication.add(novel1);
-
-
-        webToon webtoon1 = new webToon("Tower of God", "SIU", "Naver Webtoon", 2010, "Acción", "SIU",true);
-        publication.add(webtoon1);
-
 	}
 
 }
