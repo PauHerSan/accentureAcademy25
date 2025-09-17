@@ -1,0 +1,300 @@
+[
+  {
+    "titulo": "Attack on Titan",
+    "escritor": "Hajime Isayama",
+    "director": "Tetsurō Araki",
+    "anoDeLanzamiento": 2013,
+    "numeroDeCapitulos": 89,
+    "genero": [
+      "Acción",
+      "Fantasía oscura",
+      "Post-apocalíptico"
+    ]
+  },
+  {
+    "titulo": "Death Note",
+    "escritor": "Tsugumi Ohba",
+    "director": "Tetsurō Araki",
+    "anoDeLanzamiento": 2006,
+    "numeroDeCapitulos": 37,
+    "genero": [
+      "Misterio",
+      "Thriller psicológico",
+      "Sobrenatural"
+    ]
+  },
+  {
+    "titulo": "Fullmetal Alchemist: Brotherhood",
+    "escritor": "Hiromu Arakawa",
+    "director": "Yasuhiro Irie",
+    "anoDeLanzamiento": 2009,
+    "numeroDeCapitulos": 64,
+    "genero": [
+      "Aventura",
+      "Fantasía",
+      "Steampunk"
+    ]
+  },
+  {
+    "titulo": "My Hero Academia",
+    "escritor": "Kōhei Horikoshi",
+    "director": "Kenji Nagasaki",
+    "anoDeLanzamiento": 2016,
+    "numeroDeCapitulos": 138,
+    "genero": [
+      "Superhéroes",
+      "Acción",
+      "Comedia"
+    ]
+  },
+  {
+    "titulo": "Demon Slayer: Kimetsu no Yaiba",
+    "escritor": "Koyoharu Gotouge",
+    "director": "Haruo Sotozaki",
+    "anoDeLanzamiento": 2019,
+    "numeroDeCapitulos": 55,
+    "genero": [
+      "Aventura",
+      "Fantasía oscura",
+      "Histórico"
+    ]
+  },
+  {
+    "titulo": "Jujutsu Kaisen",
+    "escritor": "Gege Akutami",
+    "director": "Sunghoo Park",
+    "anoDeLanzamiento": 2020,
+    "numeroDeCapitulos": 47,
+    "genero": [
+      "Acción",
+      "Fantasía oscura",
+      "Sobrenatural"
+    ]
+  },
+  {
+    "titulo": "One Punch Man",
+    "escritor": "ONE",
+    "director": "Shingo Natsume",
+    "anoDeLanzamiento": 2015,
+    "numeroDeCapitulos": 24,
+    "genero": [
+      "Acción",
+      "Comedia",
+      "Superhéroes"
+    ]
+  },
+  {
+    "titulo": "Naruto",
+    "escritor": "Masashi Kishimoto",
+    "director": "Hayato Date",
+    "anoDeLanzamiento": 2002,
+    "numeroDeCapitulos": 220,
+    "genero": [
+      "Aventura",
+      "Artes marciales",
+      "Fantasía"
+    ]
+  },
+  {
+    "titulo": "Steins;Gate",
+    "escritor": "Jukki Hanada",
+    "director": "Hiroshi Hamasaki",
+    "anoDeLanzamiento": 2011,
+    "numeroDeCapitulos": 24,
+    "genero": [
+      "Ciencia ficción",
+      "Thriller",
+      "Drama"
+    ]
+  },
+  {
+    "titulo": "Code Geass: Lelouch of the Rebellion",
+    "escritor": "Ichirō Ōkouchi",
+    "director": "Gorō Taniguchi",
+    "anoDeLanzamiento": 2006,
+    "numeroDeCapitulos": 50,
+    "genero": [
+      "Mecha",
+      "Militar",
+      "Ciencia ficción"
+    ]
+  },
+  {
+    "titulo": "Hunter x Hunter (2011)",
+    "escritor": "Yoshihiro Togashi",
+    "director": "Hiroshi Kōjina",
+    "anoDeLanzamiento": 2011,
+    "numeroDeCapitulos": 148,
+    "genero": [
+      "Aventura",
+      "Fantasía"
+    ]
+  },
+  {
+    "titulo": "Cowboy Bebop",
+    "escritor": "Keiko Nobumoto",
+    "director": "Shinichirō Watanabe",
+    "anoDeLanzamiento": 1998,
+    "numeroDeCapitulos": 26,
+    "genero": [
+      "Ciencia ficción",
+      "Neo-noir",
+      "Aventura"
+    ]
+  },
+  {
+    "titulo": "Gintama",
+    "escritor": "Hideaki Sorachi",
+    "director": "Shinji Takamatsu",
+    "anoDeLanzamiento": 2006,
+    "numeroDeCapitulos": 367,
+    "genero": [
+      "Comedia",
+      "Ciencia ficción",
+      "Histórico"
+    ]
+  },
+  {
+    "titulo": "One Piece",
+    "escritor": "Eiichiro Oda",
+    "director": "Konosuke Uda",
+    "anoDeLanzamiento": 1999,
+    "numeroDeCapitulos": 1000,
+    "genero": [
+      "Aventura",
+      "Fantasía"
+    ]
+  },
+  {
+    "titulo": "JoJo's Bizarre Adventure",
+    "escritor": "Hirohiko Araki",
+    "director": "Naokatsu Tsuda",
+    "anoDeLanzamiento": 2012,
+    "numeroDeCapitulos": 190,
+    "genero": [
+      "Aventura",
+      "Fantasía",
+      "Sobrenatural"
+    ]
+  },
+  {
+    "titulo": "Mob Psycho 100",
+    "escritor": "ONE",
+    "director": "Yuzuru Tachikawa",
+    "anoDeLanzamiento": 2016,
+    "numeroDeCapitulos": 37,
+    "genero": [
+      "Acción",
+      "Comedia",
+      "Sobrenatural"
+    ]
+  },
+  {
+    "titulo": "Vinland Saga",
+    "escritor": "Makoto Yukimura",
+    "director": "Shūhei Yabuta",
+    "anoDeLanzamiento": 2019,
+    "numeroDeCapitulos": 48,
+    "genero": [
+      "Aventura",
+      "Histórico",
+      "Drama"
+    ]
+  },
+  {
+    "titulo": "Spy x Family",
+    "escritor": "Tatsuya Endo",
+    "director": "Kazuhiro Furuhashi",
+    "anoDeLanzamiento": 2022,
+    "numeroDeCapitulos": 37,
+    "genero": [
+      "Comedia",
+      "Espionaje",
+      "Slice of Life"
+    ]
+  },
+  {
+    "titulo": "Chainsaw Man",
+    "escritor": "Tatsuki Fujimoto",
+    "director": "Ryū Nakayama",
+    "anoDeLanzamiento": 2022,
+    "numeroDeCapitulos": 12,
+    "genero": [
+      "Acción",
+      "Fantasía oscura",
+      "Horror"
+    ]
+  },
+  {
+    "titulo": "Psycho-Pass",
+    "escritor": "Gen Urobuchi",
+    "director": "Naoyoshi Shiotani",
+    "anoDeLanzamiento": 2012,
+    "numeroDeCapitulos": 33,
+    "genero": [
+      "Ciencia ficción",
+      "Cyberpunk",
+      "Thriller psicológico"
+    ]
+  },
+  {
+    "titulo": "Erased",
+    "escritor": "Kei Sanbe",
+    "director": "Tomohiko Itō",
+    "anoDeLanzamiento": 2016,
+    "numeroDeCapitulos": 12,
+    "genero": [
+      "Misterio",
+      "Sobrenatural",
+      "Thriller"
+    ]
+  },
+  {
+    "titulo": "Tengen Toppa Gurren Lagann",
+    "escritor": "Kazuki Nakashima",
+    "director": "Hiroyuki Imaishi",
+    "anoDeLanzamiento": 2007,
+    "numeroDeCapitulos": 27,
+    "genero": [
+      "Mecha",
+      "Aventura",
+      "Ciencia ficción"
+    ]
+  },
+  {
+    "titulo": "Mushoku Tensei: Jobless Reincarnation",
+    "escritor": "Rifujin na Magonote",
+    "director": "Manabu Okamoto",
+    "anoDeLanzamiento": 2021,
+    "numeroDeCapitulos": 23,
+    "genero": [
+      "Isekai",
+      "Fantasía",
+      "Drama"
+    ]
+  },
+  {
+    "titulo": "Haikyuu!!",
+    "escritor": "Haruichi Furudate",
+    "director": "Susumu Mitsunaka",
+    "anoDeLanzamiento": 2014,
+    "numeroDeCapitulos": 85,
+    "genero": [
+      "Deportes",
+      "Comedia",
+      "Drama"
+    ]
+  },
+  {
+    "titulo": "Dr. Stone",
+    "escritor": "Riichiro Inagaki",
+    "director": "Shinya Iino",
+    "anoDeLanzamiento": 2019,
+    "numeroDeCapitulos": 46,
+    "genero": [
+      "Ciencia ficción",
+      "Aventura",
+      "Post-apocalíptico"
+    ]
+  }
+]

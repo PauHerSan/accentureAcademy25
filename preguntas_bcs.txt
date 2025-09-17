@@ -1,0 +1,10 @@
+¿Cuál es la diferencia entre sobrecarga de métodos (method overloading) y sobreescritura de métodos (method overriding)?
+Describe cómo funciona la memoria Heap y la memoria Stack en Java.
+Explica el resultado de la siguiente operación en Java: 200 + "keep on coding" + 100 + 100
+¿Qué son las copias superficiales (shallow copies) y copias profundas (deep copies) de objetos?
+¿Cómo funciona el recolector de basura (garbage collector) en Java y cuál es su propósito?
+¿En qué se diferencia un constructor de un método normal en Java?
+¿Cuál es el propósito de la palabra clave this en Java?
+¿Por qué y cómo se utiliza una clase abstracta en Java?
+¿Cómo funciona y para qué sirve la palabra clave super en Java?
+Explica por qué son útiles los genéricos en Java.
