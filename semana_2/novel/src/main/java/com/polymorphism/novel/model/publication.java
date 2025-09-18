@@ -16,11 +16,5 @@ public abstract class publication {
         this.genre = genre;
     }
 
-    public static void add(novels novel) {
-    }
-
-    public static void add(webToon webtoon1) {
-    }
-
     public abstract void printDetails();
 }

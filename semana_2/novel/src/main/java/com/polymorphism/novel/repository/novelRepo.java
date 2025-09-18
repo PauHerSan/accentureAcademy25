@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface novelRepo extends JpaRepository<publication,Long> {
-    List<publication> findByTitle(String title);
 
     List<publication> findByTitleContainingIgnoreCase(String title);
 
