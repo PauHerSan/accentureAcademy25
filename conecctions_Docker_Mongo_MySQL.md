@@ -66,17 +66,11 @@ spring.jpa.properties.hibernate.format_sql=true
 ##**4. Crear la base de datos**
 Conéctate al contenedor MySQL y crea la base de datos:
 
-bash
+En este se llamará novels_data
 
 ### Conectar al contenedor
 docker exec -it novels_data mysql -u root -pnovels1234 
 (sin espacio la contraseña)
-
-### Dentro de MySQL, crear la base de datos
-
-CREATE DATABASE novels_db;
-SHOW DATABASES;
-EXIT;
 
 ##**5. Conectar desde MySQL Workbench**
 
@@ -86,6 +80,12 @@ Host: localhost o 127.0.0.1
 Puerto: 3307
 Usuario: root
 Contraseña: novels1234
+
+Ya dentro crea:
+
+Create a new Schema in the connected server
+"novels_db"
+
 
 ##**6. Ejemplo de configuración con código Java**
 
