@@ -1,7 +1,6 @@
 package com.polymorphism.novel.repository;
 
 import com.polymorphism.novel.model.publication;
-import com.polymorphism.novel.model.webToon;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface novelRepo extends JpaRepository<publication,Long> {
+public interface publicationRepo extends JpaRepository<publication,Long> {
 
     List<publication> findByTitleIgnoreCase(String title);
     List<publication> findByWriterIgnoreCase(String author);
