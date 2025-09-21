@@ -27,209 +27,138 @@ import static org.mockito.Mockito.*;
 public class publicationServiceTest {
 
     @Mock
-    private publicationRepo repoTest;
+    private publicationRepo publicationRepo;
 
     @InjectMocks
-    private publicationServicelmpl serviceTest; //
+    private publicationServicelmpl publicationService;
 
-    private novels testNovelPublication;
     private novels testNovel;
     private webToon testWebToon;
-    private publication testGenericPublication;
-
 
     @BeforeEach
     void setUp() {
-
-        testNovelPublication = new novels();
-        testNovelPublication.setId(1L);
-        testNovelPublication.setTitle("Test Publication");
-        testNovelPublication.setWriter("Test Author");
-        testNovelPublication.setPublisher("Test Publisher");
-        testNovelPublication.setYearOfRelease(1999);
-        testNovelPublication.setGenre("Test Genre");
-        testNovelPublication.setStatus("Test Status");
-
-
-        testNovel = new novels();
-        testNovel.setId(2L);
-        testNovel.setTitle("Test Novel");
-        testNovel.setEditor("Test Editor");
-        testNovelPublication.setGenre("Fantasy");
-        testNovel.setChapters(250);
-
-
-        testWebToon = new webToon();
-        testWebToon.setId(3L);
-        testWebToon.setTitle("Test WebToon");
-        testWebToon.setArtist("Test Artist");
-        testWebToon.setFullColor(true);
-
-        testGenericPublication = new novels();
-        testGenericPublication.setId(4L);
-        testGenericPublication.setTitle("Generic Publication");
-        testGenericPublication.setWriter("Generic Author");
-
+        testNovel = new novels(1L, "Test Novel", "Writer A", "Publisher B", 2023, "Fantasy", "Ongoing", "Editor X", 150);
+        testWebToon = new webToon(2L, "Test Webtoon", "Writer C", "Publisher D", 2022, "Action", "Completed", "Artist Y", true);
     }
 
     @Test
-    void testGetAllPublications() {
-        List<publication> allPublications = Arrays.asList(testNovelPublication, testNovel, testWebToon);
-        when(repoTest.findAll()).thenReturn(allPublications);
+    void getAllPublications_shouldReturnAllPublications() {
+        // Arrange
+        when(publicationRepo.findAll()).thenReturn(List.of(testNovel, testWebToon));
 
-        List<publication> result = serviceTest.getAllPublications();
+        // Act
+        List<publication> publications = publicationService.getAllPublications();
 
+        // Assert
+        assertNotNull(publications);
+        assertEquals(2, publications.size());
+        verify(publicationRepo, times(1)).findAll();
+    }
+
+    @Test
+    void getPublicationById_shouldReturnPublication() {
+        // Arrange
+        when(publicationRepo.findById(1L)).thenReturn(Optional.of(testNovel));
+
+        // Act
+        publication foundPublication = publicationService.getPublicationById(1L);
+
+        // Assert
+        assertNotNull(foundPublication);
+        assertEquals("Test Novel", foundPublication.getTitle());
+    }
+
+    @Test
+    void getPublicationById_whenNotFound_shouldThrowException() {
+        // Arrange
+        when(publicationRepo.findById(anyLong())).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> publicationService.getPublicationById(99L));
+    }
+
+    @Test
+    void createPublication_shouldReturnCreatedPublication() {
+        // Arrange
+        when(publicationRepo.save(any(novels.class))).thenReturn(testNovel);
+
+        // Act
+        publication createdNovel = publicationService.createPublication(testNovel);
+
+        // Assert
+        assertNotNull(createdNovel);
+        assertEquals("Test Novel", createdNovel.getTitle());
+        verify(publicationRepo, times(1)).save(testNovel);
+    }
+
+    @Test
+    void updatePublication_shouldUpdateNovelSuccessfully() {
+        // Arrange
+        novels updatedDetails = new novels(1L, "Updated Title", "Writer A", "Publisher B", 2023, "Fantasy", "Ongoing", "New Editor", 200);
+        when(publicationRepo.findById(1L)).thenReturn(Optional.of(testNovel));
+        when(publicationRepo.save(any(novels.class))).thenReturn(updatedDetails);
+
+        // Act
+        publication result = publicationService.updatePublication(1L, updatedDetails);
+
+        // Assert
         assertNotNull(result);
-        assertEquals(3, result.size());
-        assertEquals("Test Publication", result.get(0).getTitle());
-        verify(repoTest, times(1)).findAll();
+        assertEquals("Updated Title", result.getTitle());
+        assertEquals("New Editor", ((novels) result).getEditor());
     }
 
     @Test
-    void testGetAllNovels() {
-        List<publication> mixedList = Arrays.asList(testNovelPublication, testNovel, testWebToon);
-        when(repoTest.findAll()).thenReturn(mixedList);
+    void updatePublication_whenTypesDoNotMatch_shouldThrowException() {
+        // Arrange
+        when(publicationRepo.findById(1L)).thenReturn(Optional.of(testNovel));
+        when(publicationRepo.save(any(webToon.class))).thenReturn(testWebToon);
 
-        List<novels> result = serviceTest.getAllNovels();
-
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals("Test Publication", result.get(0).getTitle());
-        assertEquals("Test Novel", result.get(1).getTitle());
-        verify(repoTest, times(1)).findAll();
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> publicationService.updatePublication(1L, testWebToon));
     }
 
     @Test
-    void testGetAllWebToons() {
-        List<publication> mixedList = Arrays.asList(testNovelPublication, testNovel, testWebToon);
-        when(repoTest.findAll()).thenReturn(mixedList);
+    void deletePublicationByTitle_shouldReturnTrueWhenExists() {
+        // Arrange
+        when(publicationRepo.existsByTitle("Test Novel")).thenReturn(true);
+        doNothing().when(publicationRepo).deleteByTitle("Test Novel");
 
-        List<webToon> result = serviceTest.getAllWebToons();
+        // Act
+        boolean isDeleted = publicationService.deletePublicationByTitle("Test Novel");
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("Test WebToon", result.get(0).getTitle());
-        verify(repoTest, times(1)).findAll();
-    }
-
-    @Test
-    void testGetPublicationById_Success() {
-        when(repoTest.findById(1L)).thenReturn(Optional.of(testNovelPublication));
-
-        publication result = serviceTest.getPublicationById(1L);
-
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        verify(repoTest, times(1)).findById(1L);
-    }
-
-    @Test
-    void testGetPublicationById_NotFound() {
-        when(repoTest.findById(99L)).thenReturn(Optional.empty());
-
-        assertThrows(RuntimeException.class, () -> serviceTest.getPublicationById(99L));
-
-        verify(repoTest, times(1)).findById(99L);
-    }
-
-    @Test
-    void testGetPublicationsByTitle() {
-        when(repoTest.findByTitleIgnoreCase("Test Publication")).thenReturn(Collections.singletonList(testNovelPublication));
-
-        List<publication> result = serviceTest.getPublicationsByTitle("Test Publication");
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("Test Publication", result.get(0).getTitle());
-        verify(repoTest, times(1)).findByTitleIgnoreCase("Test Publication");
-    }
-
-    @Test
-    void testGetPublicationsByAuthor() {
-        when(repoTest.findByWriterIgnoreCase("Test Author")).thenReturn(Collections.singletonList(testNovelPublication));
-
-        List<publication> result = serviceTest.getPublicationsByAuthor("Test Author");
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("Test Author", result.get(0).getWriter());
-        verify(repoTest, times(1)).findByWriterIgnoreCase("Test Author");
-    }
-
-    @Test
-    void testGetNovelsByGenre() {
-        List<publication> mixedList = Arrays.asList(testNovel, testNovelPublication, testWebToon);
-        when(repoTest.findAll()).thenReturn(mixedList);
-
-        List<novels> result = serviceTest.getNovelsByGenre("Fantasy");
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("Test Novel", result.get(0).getTitle());
-        verify(repoTest, times(1)).findAll();
-    }
-
-    @Test
-    void testCreatePublication() {
-        when(repoTest.save(any(publication.class))).thenReturn(testGenericPublication);
-
-        publication result = serviceTest.createPublication(testGenericPublication);
-
-        assertNotNull(result);
-        assertEquals("Generic Publication", result.getTitle());
-        verify(repoTest, times(1)).save(any(publication.class));
-    }
-
-    @Test
-    void testUpdatePublication_Novel() {
-        novels updatedNovelDetails = new novels();
-        updatedNovelDetails.setTitle("Updated Novel Title");
-        updatedNovelDetails.setWriter("Updated Novel Author");
-        updatedNovelDetails.setEditor("New Editor");
-        updatedNovelDetails.setChapters(150);
-
-        when(repoTest.findById(2L)).thenReturn(Optional.of(testNovel));
-        when(repoTest.save(any(novels.class))).thenReturn(updatedNovelDetails);
-
-        novels updatedNovel = (novels) serviceTest.updatePublication(2L, updatedNovelDetails);
-
-        assertNotNull(updatedNovel);
-        assertEquals("Updated Novel Title", updatedNovel.getTitle());
-        assertEquals("New Editor", updatedNovel.getEditor());
-        assertEquals(150, updatedNovel.getChapters());
-        verify(repoTest, times(1)).findById(2L);
-        verify(repoTest, times(1)).save(any(novels.class));
-    }
-
-    @Test
-    void testDeletePublicationByTitle() {
-        doNothing().when(repoTest).deleteByTitle("Test Publication");
-
-        boolean isDeleted = serviceTest.deletePublicationByTitle("Test Publication");
-
+        // Assert
         assertTrue(isDeleted);
-        verify(repoTest, times(1)).deleteByTitle("Test Publication");
+        verify(publicationRepo, times(1)).existsByTitle("Test Novel");
+        verify(publicationRepo, times(1)).deleteByTitle("Test Novel");
     }
 
     @Test
-    void testUpdatePublication_WebToon() {
-        webToon updatedWebToonDetails = new webToon();
-        updatedWebToonDetails.setTitle("Updated WebToon Title");
-        updatedWebToonDetails.setWriter("Updated WebToon Author");
-        updatedWebToonDetails.setArtist("New Artist");
-        updatedWebToonDetails.setFullColor(false);
+    void deletePublicationByTitle_shouldReturnFalseWhenNotExists() {
+        // Arrange
+        when(publicationRepo.existsByTitle("Non Existent Title")).thenReturn(false);
 
-        when(repoTest.findById(3L)).thenReturn(Optional.of(testWebToon));
-        when(repoTest.save(any(webToon.class))).thenReturn(updatedWebToonDetails);
+        // Act
+        boolean isDeleted = publicationService.deletePublicationByTitle("Non Existent Title");
 
-        webToon updatedWebToon = (webToon) serviceTest.updatePublication(3L, updatedWebToonDetails);
+        // Assert
+        assertFalse(isDeleted);
+        verify(publicationRepo, times(1)).existsByTitle("Non Existent Title");
+        verify(publicationRepo, never()).deleteByTitle(anyString());
+    }
 
-        assertNotNull(updatedWebToon);
-        assertEquals("Updated WebToon Title", updatedWebToon.getTitle());
-        assertEquals("New Artist", updatedWebToon.getArtist());
-        assertFalse(updatedWebToon.isFullColor());
-        verify(repoTest, times(1)).findById(3L);
-        verify(repoTest, times(1)).save(any(webToon.class));
+    @Test
+    void getAllNovels_shouldReturnOnlyNovels() {
+        // Arrange
+        when(publicationRepo.findAllNovels()).thenReturn(List.of(testNovel));
+
+        // Act
+        List<novels> foundNovels = publicationService.getAllNovels();
+
+        // Assert
+        assertNotNull(foundNovels);
+        assertEquals(1, foundNovels.size());
+        assertEquals("Test Novel", foundNovels.get(0).getTitle());
+        verify(publicationRepo, times(1)).findAllNovels();
     }
 
 

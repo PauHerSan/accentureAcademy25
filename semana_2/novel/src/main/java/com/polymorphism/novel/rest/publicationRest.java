@@ -18,10 +18,7 @@ import java.util.List;
 public class publicationRest {
 
     @Autowired
-    private publicationRepo publicationRepo;
-    @Autowired
     private publicationService publicationService;
-
 
     // 1. CONSULTAR DE MANERA GENERAL
     @GetMapping("/all")
@@ -56,48 +53,37 @@ public class publicationRest {
     }
 
     // 3. CONSULTAR POR TÍTULO
-    @GetMapping("/title/{title}")
+    @GetMapping("/by-title/{title}")
     public ResponseEntity<List<publication>> getPublicationsByTitle(@PathVariable String title) {
         List<publication> publications = publicationService.getPublicationsByTitle(title);
         if (publications.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.ok(publications);
     }
 
     // 4. CONSULTAR POR ESCRITOR/AUTOR
-    @GetMapping("/author/{author}")
-    public ResponseEntity<List<publication>> getPublicationsByAuthor(@PathVariable String author) {
-        List<publication> publications = publicationService.getPublicationsByAuthor(author);
+    @GetMapping("/by-writer/{writer}")
+    public ResponseEntity<List<publication>> getPublicationsByWriter(@PathVariable String writer) {
+        List<publication> publications = publicationService.getPublicationsByAuthor(writer);
+        if (publications.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(publications);
+    }
+
+    // 5. CONSULTAR POR GÉNERO (para cualquier tipo de publicación)
+    @GetMapping("/by-genre/{genre}")
+    public ResponseEntity<List<publication>> getPublicationsByGenre(@PathVariable String genre) {
+        List<publication> publications = publicationService.getPublicationsByGenre(genre);
         if (publications.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(publications);
     }
 
-    // 5. CONSULTAR POR GÉNERO (solo para novels)
-    @GetMapping("/genre/{genre}")
-    public ResponseEntity<List<novels>> getNovelsByGenre(@PathVariable String genre) {
-        List<novels> novels = publicationService.getNovelsByGenre(genre);
-        if (novels.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(novels);
-    }
-
-    // 6. CREAR NUEVA PUBLICACIÓN (novel o webtoon)
-    @PostMapping
-    public ResponseEntity<publication> createPublication(@RequestBody publication publication) {
-        try {
-            publication createdPublication = publicationService.createPublication(publication);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdPublication);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    // Endpoint específico para crear novel
-    @PostMapping("/new-Novel")
+    // 6. CREAR PUBLICACIÓN (se mantiene la lógica específica)
+    @PostMapping("/new-novel")
     public ResponseEntity<publication> createNovel(@RequestBody novels novel) {
         try {
             publication createdNovel = publicationService.createPublication(novel);
@@ -107,8 +93,7 @@ public class publicationRest {
         }
     }
 
-    // Endpoint específico para crear webtoon
-    @PostMapping("/new-Webtoon")
+    @PostMapping("/new-webtoon")
     public ResponseEntity<publication> createWeebToon(@RequestBody webToon weebToon) {
         try {
             publication createdWebToon = publicationService.createPublication(weebToon);
@@ -119,28 +104,27 @@ public class publicationRest {
     }
 
     // 7. ACTUALIZAR PUBLICACIÓN
-    @PutMapping("/actu/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<publication> updatePublication(@PathVariable Long id,
-                                                          @RequestBody publication publicationDetails) {
+                                                         @RequestBody publication publicationDetails) {
         try {
             publication updatedPublication = publicationService.updatePublication(id, publicationDetails);
             return ResponseEntity.ok(updatedPublication);
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
     // 8. ELIMINAR POR TÍTULO
-    @DeleteMapping("/byeTitle/{title}")
+    @DeleteMapping("/by-title/{title}")
     public ResponseEntity<String> deletePublicationByTitle(@PathVariable String title) {
         boolean deleted = publicationService.deletePublicationByTitle(title);
         if (deleted) {
             return ResponseEntity.ok("Publication with title '" + title + "' deleted successfully");
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Publication with title '" + title + "' not found.");
         }
-
     }
 }//Rest

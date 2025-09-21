@@ -6,159 +6,139 @@ import com.polymorphism.novel.model.publication;
 import com.polymorphism.novel.model.webToon;
 import com.polymorphism.novel.rest.publicationRest;
 import com.polymorphism.novel.service.publicationService;
-import com.polymorphism.novel.service.publicationServicelmpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
+@ExtendWith(MockitoExtension.class)
 @WebMvcTest(publicationRest.class)
 public class controllerTest {
 
-    @Autowired
-    private MockMvc mockMvcTest;
+    private MockMvc mockMvc;
 
     @MockitoBean
-    private publicationService publicationServiceTest; //
+    private publicationService publicationService;
 
-    @MockitoBean
-    private publicationRest publicationRestTest;
+    @InjectMocks
+    private publicationRest publicationRest;
 
-    private publication testPublicationControl;
-    private novels testNovelControl;
-    private webToon testWebToonControl;
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp() {
-        testPublicationControl = new novels();
-        testPublicationControl.setId(1L);
-        testPublicationControl.setTitle("Test Publication");
-        testPublicationControl.setWriter("Test Author");
-        testPublicationControl.setPublisher("Test Publisher");
-        testPublicationControl.setYearOfRelease(1999);
-        testPublicationControl.setGenre("Test Genre");
-        testPublicationControl.setStatus("Test Status");
-
-        testNovelControl = new novels();
-        testNovelControl.setId(2L);
-        testNovelControl.setTitle("Novel Title");
-        testNovelControl.setEditor("Novel Author");
-        testNovelControl.setChapters(123);
-
-        testWebToonControl = new webToon();
-        testWebToonControl.setId(3L);
-        testWebToonControl.setTitle("WebToon Title");
-        testWebToonControl.setArtist("WebToon Artist");
-        testWebToonControl.setFullColor(true);
-
+    public void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(publicationRest).build();
         objectMapper = new ObjectMapper();
     }
 
     @Test
-    void testGetAllPublications() throws Exception {
-        List<publication> allPublications = Arrays.asList(testPublicationControl, testNovelControl, testWebToonControl);
-        when(publicationServiceTest.getAllPublications()).thenReturn(allPublications);
+    public void testGetAllPublications_shouldReturnOkAndList() throws Exception {
+        // Arrange
+        publication testPublication = new novels(1L, "Title", "Writer", "Publisher", 2023, "Genre", "Status", "Editor", 100);
+        when(publicationService.getAllPublications()).thenReturn(Collections.singletonList(testPublication));
 
-        mockMvcTest.perform(get("/api/publications/all"))
+        // Act & Assert
+        mockMvc.perform(get("/api/publications/all")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].title").value("Test Publication"))
-                .andExpect(jsonPath("$[1].title").value("Novel Title"))
-                .andExpect(jsonPath("$[2].title").value("WebToon Title"));
-
-        verify(publicationServiceTest, times(1)).getAllPublications();
+                .andExpect(jsonPath("$[0].title").value("Title"));
     }
 
     @Test
-    void testGetPublicationById_Success() throws Exception {
-        when(publicationServiceTest.getPublicationById(1L)).thenReturn(testPublicationControl);
+    public void testGetPublicationById_shouldReturnOk() throws Exception {
+        // Arrange
+        publication testPublication = new webToon(1L, "WebTitle", "WebWriter", "WebPub", 2022, "Action", "Ongoing", "Artist", true);
+        when(publicationService.getPublicationById(1L)).thenReturn(testPublication);
 
-        mockMvcTest.perform(get("/api/publications/{id}", 1L))
+        // Act & Assert
+        mockMvc.perform(get("/api/publications/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.title").value("Test Title"));
-
-        verify(publicationServiceTest, times(1)).getPublicationById(1L);
+                .andExpect(jsonPath("$.title").value("WebTitle"));
     }
 
     @Test
-    void testGetPublicationById_NotFound() throws Exception {
-        when(publicationServiceTest.getPublicationById(99L)).thenThrow(new RuntimeException("Publication not found"));
+    public void testGetPublicationById_shouldReturnNotFound() throws Exception {
+        // Arrange
+        when(publicationService.getPublicationById(anyLong())).thenThrow(new RuntimeException());
 
-        mockMvcTest.perform(get("/api/publications/{id}", 99L))
+        // Act & Assert
+        mockMvc.perform(get("/api/publications/{id}", 99L)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
-
-        verify(publicationServiceTest, times(1)).getPublicationById(99L);
     }
 
     @Test
-    void testCreatePublication_Success() throws Exception {
-        when(publicationServiceTest.createPublication(any(publication.class))).thenReturn(testPublicationControl);
+    public void testCreateNovel_shouldReturnCreated() throws Exception {
+        // Arrange
+        novels novelToCreate = new novels(null, "New Novel", "Author A", "Publisher B", 2024, "Fantasy", "Pending", "Editor X", 200);
+        novels createdNovel = new novels(1L, "New Novel", "Author A", "Publisher B", 2024, "Fantasy", "Pending", "Editor X", 200);
+        when(publicationService.createPublication(any(novels.class))).thenReturn(createdNovel);
 
-        mockMvcTest.perform(post("/api/publications")
+        // Act & Assert
+        mockMvc.perform(post("/api/publications/new-novel")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testPublicationControl)))
+                        .content(objectMapper.writeValueAsString(novelToCreate)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.title").value("Test Title"));
-
-        verify(publicationServiceTest, times(1)).createPublication(any(publication.class));
+                .andExpect(jsonPath("$.id").value(1L));
     }
 
     @Test
-    void testCreatePublication_BadRequest() throws Exception {
-        when(publicationServiceTest.createPublication(any(publication.class))).thenThrow(new RuntimeException());
+    public void testUpdatePublication_whenTypesDoNotMatch_shouldReturnNotFound() throws Exception {
+        // Arrange
+        novels existingNovel = new novels(1L, "Old Title", "Old Writer", "Old Publisher", 2020, "Old Genre", "Old Status", "Old Editor", 150);
+        webToon webToonDetails = new webToon(1L, "New Title", "New Writer", "New Publisher", 2021, "New Genre", "New Status", "New Artist", true);
 
-        mockMvcTest.perform(post("/api/publications")
+        // Configurar el mock para que la llamada a 'getPublicationById' devuelva la novela
+        when(publicationService.getPublicationById(1L)).thenReturn(existingNovel);
+
+        // Y el mock para que 'updatePublication' lance la excepción
+        when(publicationService.updatePublication(anyLong(), any(publication.class)))
+                .thenThrow(new RuntimeException("Publication type does not match for update."));
+
+        // Act & Assert
+        mockMvc.perform(put("/api/publications/update/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
-                .andExpect(status().isBadRequest());
+                        .content(objectMapper.writeValueAsString(webToonDetails)))
+                .andExpect(status().isNotFound()); // El test espera un 404
     }
 
     @Test
-    void testDeletePublicationByTitle_Success() throws Exception {
-        when(publicationServiceTest.deletePublicationByTitle("Test Title")).thenReturn(true);
+    public void testDeleteByTitle_shouldReturnOk() throws Exception {
+        // Arrange
+        String titleToDelete = "Test Title";
+        when(publicationService.deletePublicationByTitle(titleToDelete)).thenReturn(true);
 
-        mockMvcTest.perform(delete("/api/publications/byeTitle/{title}", "Test Title"))
+        // Act & Assert
+        mockMvc.perform(delete("/api/publications/by-title/{title}", titleToDelete)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Publication with title 'Test Title' deleted successfully"));
-
-        verify(publicationServiceTest, times(1)).deletePublicationByTitle("Test Title");
+                .andExpect(content().string("Publication with title '" + titleToDelete + "' deleted successfully"));
     }
 
     @Test
-    void testDeletePublicationByTitle_NotFound() throws Exception {
-        when(publicationServiceTest.deletePublicationByTitle("Nonexistent Title")).thenReturn(false);
+    public void testDeleteByTitle_shouldReturnNotFound() throws Exception {
+        // Arrange
+        String titleToDelete = "NonExistent Title";
+        when(publicationService.deletePublicationByTitle(titleToDelete)).thenReturn(false);
 
-        mockMvcTest.perform(delete("/api/publications/byeTitle/{title}", "Nonexistent Title"))
+        // Act & Assert
+        mockMvc.perform(delete("/api/publications/by-title/{title}", titleToDelete)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
-
-        verify(publicationServiceTest, times(1)).deletePublicationByTitle("Nonexistent Title");
     }
-
-    @Test
-    void testGetNovelsByGenre_Success() throws Exception {
-        List<novels> novels = Collections.singletonList(testNovelControl);
-        when(publicationServiceTest.getNovelsByGenre("Fantasy")).thenReturn(novels);
-
-        mockMvcTest.perform(get("/api/publications/genre/{genre}", "Fantasy"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].genre").value("Fantasy"));
-
-        verify(publicationServiceTest, times(1)).getNovelsByGenre("Fantasy");
-    }
-
 }

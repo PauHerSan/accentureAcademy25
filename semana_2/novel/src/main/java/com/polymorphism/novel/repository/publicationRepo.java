@@ -32,7 +32,7 @@ public interface publicationRepo extends JpaRepository<publication,Long> {
     List<publication> findAllWebToons();
 
     // Query para obtener novels por género específicamente
-    @Query("SELECT p FROM publication p WHERE TYPE(p) = novels AND p.genre = :genre")
+    @Query("SELECT p FROM publication p WHERE TYPE(p) IN (novels , webToon )AND p.genre = :genre")
     List<publication> findNovelsByGenre(@Param("genre") String genre);
 
     // Eliminar por título

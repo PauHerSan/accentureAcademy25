@@ -13,6 +13,7 @@ public interface publicationService {
     publication getPublicationById(Long id);
     List<publication> getPublicationsByTitle(String title);
     List<publication> getPublicationsByAuthor(String author);
+    List<publication> getPublicationsByGenre(String genre);
     publication createPublication(publication publication);
     publication updatePublication(Long id, publication publicationDetails);
     boolean deletePublicationByTitle(String title);
@@ -25,5 +26,6 @@ public interface publicationService {
     //Métodos específicos para webtoons
     List<webToon> getAllWebToons();
     webToon createWebToon(webToon webToon);
+
 
 }
