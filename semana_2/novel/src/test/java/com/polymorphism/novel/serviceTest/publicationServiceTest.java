@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class publicationServiceTest {
 
-    @MockitoBean
+    @Mock
     private publicationRepo repoTest;
 
     @InjectMocks
@@ -55,6 +55,7 @@ public class publicationServiceTest {
         testNovel.setId(2L);
         testNovel.setTitle("Test Novel");
         testNovel.setEditor("Test Editor");
+        testNovelPublication.setGenre("Fantasy");
         testNovel.setChapters(250);
 
 
