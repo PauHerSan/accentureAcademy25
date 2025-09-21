@@ -39,16 +39,6 @@ public class novels extends publication {
         this.chapters = chapters;
     }
 
-    @Override
-    public void printDetails() {
-        System.out.println("Tipo: Novela Web");
-        System.out.println("Título: " + this.title);
-        System.out.println("Escritor: " + this.writer);
-        System.out.println("Editor: " + this.editor);
-        System.out.println("Casa de publicación: " + this.publisher);
-        System.out.println("Año de lanzamiento: " + this.yearOfRelease);
-        System.out.println("Número de capítulos: " + this.chapters);
-        System.out.println("-------------------------");
-    }
+
 
 }

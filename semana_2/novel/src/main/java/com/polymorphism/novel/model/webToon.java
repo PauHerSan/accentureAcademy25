@@ -40,15 +40,4 @@ public class webToon extends publication{
         isFullColor = fullColor;
     }
 
-    @Override
-    public void printDetails() {
-        System.out.println("Tipo: Webtoon");
-        System.out.println("Título: " + this.title);
-        System.out.println("Escritor: " + this.writer);
-        System.out.println("Artista: " + this.artist);
-        System.out.println("Casa de publicación: " + this.publisher);
-        System.out.println("Año de lanzamiento: " + this.yearOfRelease);
-        System.out.println("A todo color: " + (isFullColor ? "Sí" : "No"));
-        System.out.println("-------------------------");
-    }
 }

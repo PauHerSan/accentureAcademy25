@@ -99,5 +99,5 @@ public abstract class publication {
         this.status = status;
     }
 
-    public abstract void printDetails();
+
 }
