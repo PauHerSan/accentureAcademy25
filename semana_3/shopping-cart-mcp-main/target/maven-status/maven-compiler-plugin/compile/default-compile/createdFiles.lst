@@ -1,0 +1,4 @@
+com\javatechie\ShoppingCartMcpApplication.class
+com\javatechie\respository\CartItemRepository.class
+com\javatechie\tools\ShoppingCartMcpService.class
+com\javatechie\entity\CartItem.class
