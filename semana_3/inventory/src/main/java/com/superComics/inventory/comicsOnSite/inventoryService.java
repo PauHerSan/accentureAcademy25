@@ -31,7 +31,7 @@ public class inventoryService {
         Comic.byeStock(number);
         onSiteRepo.save(Comic);
 
-//        if(Comic.needStock()){
+//        if(Comic.needRestock()){
 //            lowStock lowStock = lowStock(Comic.getId(), Comic.getTitle(),
 //                    Comic.getCurrentStock(), Comic.getMinimalStock());
 //            eventPublisher.publishEvent(lowStock);
@@ -58,7 +58,7 @@ public class inventoryService {
 
     public List<comic> getComicsWithLowStock(){
         return onSiteRepo.findAll().stream()
-                .filter(comic::needStock)
+                .filter(comic::needRestock)
                 .toList();
     }
 
@@ -71,6 +71,7 @@ public class inventoryService {
                 .map(comic -> comic.yesStock(number))
                 .orElse(false);
     }
+
 
 
 }

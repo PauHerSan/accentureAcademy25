@@ -10,4 +10,5 @@ public interface onSiteRepo extends JpaRepository<comic, Long>{
     List<comic> findAllByPublisher(String publisher);
 
 
+
 }

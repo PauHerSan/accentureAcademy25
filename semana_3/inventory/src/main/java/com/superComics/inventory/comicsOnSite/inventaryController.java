@@ -3,9 +3,7 @@ package com.superComics.inventory.comicsOnSite;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,8 +23,21 @@ public class inventaryController {
         return new ResponseEntity<>(comics, HttpStatus.OK);
     }
 
-    @GetMapping("/withStock")
-    public ResponseEntity<List<comic>> getComicsWithStock(){
-        List<comic> comics = inventoryService.getComicsWithStock();
+    @GetMapping("/{comicId}/avialable")
+    public ResponseEntity<Boolean> verifyStock(
+            @PathVariable Long comicId,
+            @RequestParam int number){
+        boolean available = inventoryService.verifyStock(comicId, number);
+        return new ResponseEntity<>(available, HttpStatus.OK);
     }
+
+    @GetMapping("/lowStock")
+    public ResponseEntity<List<comic>> getComicsWithLowStock(){
+        List<comic> comics = inventoryService.getComicsWithLowStock();
+        return new ResponseEntity<>(comics, HttpStatus.OK);
+    }
+
+    
+
+
 }

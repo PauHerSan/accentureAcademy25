@@ -60,7 +60,7 @@ public class comic {
         this.currentStock += number;
     }
 
-    public boolean needStock(){
+    public boolean needRestock(){
         return currentStock <= minimalStock;
     }
 
