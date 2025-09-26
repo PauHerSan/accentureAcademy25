@@ -9,29 +9,49 @@ import java.util.List;
 @Service
 public class inventoryService {
 
-    private final onSiteRepo onSiteRepo;
+    private final comicRepo comicRepo;
     private final ApplicationEventPublisher eventPublisher;
 
-    public inventoryService(onSiteRepo onSiteRepo, ApplicationEventPublisher eventPublisher) {
-        this.onSiteRepo = onSiteRepo;
+    public inventoryService(comicRepo comicRepo, ApplicationEventPublisher eventPublisher) {
+        this.comicRepo = comicRepo;
         this.eventPublisher = eventPublisher;
     }
 
     //Crear un nuevo comic
     @Transactional
-    public comic newComic(Long id, String sku, String title, Integer issueNumber, String publisher, double estimatedValue, Integer currentStock, Integer minimalStock, String grading, Long traderId){
+    public comic newComic(Long id, String sku, String title, Integer issueNumber, String publisher, double estimatedValue, Integer currentStock, Integer minimalStock, grading grading, Long traderId){
         comic Comic = new comic(id, sku, title, issueNumber, publisher, estimatedValue, currentStock, minimalStock , grading, traderId);
-        return onSiteRepo.save(Comic);
+        return comicRepo.save(Comic);
+    }
+
+    //Cambio de grading
+    @Transactional
+    public comic updateGrading(Long comicId, String newGradingCode) {
+
+        grading newGrading = new grading(newGradingCode);
+
+        comic comic = comicRepo.findById(comicId)
+                .orElseThrow(() -> new RuntimeException("comic no encontrado"));
+
+        comic.setGrading(newGrading);
+        comic updatedComic = comicRepo.save(comic);
+
+//        events.publishEvent(new GradingUpdated(
+//                updatedComic.getId(),
+//                updatedComic.getSku(),
+//                newGradingCode));
+
+        return updatedComic;
     }
 
     //Reducir Stock
     @Transactional
     public void byeStocks(Long comicId, int number){
-        comic Comic = onSiteRepo.findById(comicId)
+        comic Comic = comicRepo.findById(comicId)
                 .orElseThrow(()-> new IllegalArgumentException("Cómic no encontrado: " + comicId));
 
         Comic.byeStock(number);
-        onSiteRepo.save(Comic);
+        comicRepo.save(Comic);
 
 //        if(Comic.needRestock()){
 //            lowStock lowStock = lowStock(Comic.getId(), Comic.getTitle(),
@@ -44,43 +64,46 @@ public class inventoryService {
     //Aumentar Stock
     @Transactional
     public void plusStocks(Long comicId, int number){
-        comic Comic =  onSiteRepo.findById(comicId)
+        comic Comic =  comicRepo.findById(comicId)
                 .orElseThrow(()-> new IllegalArgumentException("Cómic no encontrado: " + comicId));
 
         Comic.plusStock(number);
-        onSiteRepo.save(Comic);
+        comicRepo.save(Comic);
     }
 
     //Obtener lista de todos los comics
     public List<comic> getAllComics(){
-        return onSiteRepo.findAll();
+
+        return comicRepo.findAll();
     }
 
     //Obtener comic por id
     public comic getComicsById(Long comicId){
-        return onSiteRepo.findById(comicId).orElseThrow(()-> new IllegalArgumentException("Cómic no encontrado: " + comicId));
+        return comicRepo.findById(comicId).orElseThrow(()-> new IllegalArgumentException("Cómic no encontrado: " + comicId));
     }
 
     //Obtener comic con bajo stock
     public List<comic> getComicsWithLowStock(){
-        return onSiteRepo.findAll().stream()
+        return comicRepo.findAll().stream()
                 .filter(comic::needRestock)
                 .toList();
     }
 
     //Obtener comic por título
     public List<comic> getComicsByTitle(String title){
-        return onSiteRepo.findByTitle(title);
+
+        return comicRepo.findByTitle(title);
     }
 
     //Obtener comic por editorial (publisher)
     public List<comic> getComicsByPublisher(String publisher){
-        return onSiteRepo.findAllByPublisher(publisher);
+
+        return comicRepo.findAllByPublisher(publisher);
     }
 
     //Verificar Stock
     public boolean verifyStock(Long comicId, int number ){
-        return onSiteRepo.findById(comicId)
+        return comicRepo.findById(comicId)
                 .map(comic -> comic.yesStock(number))
                 .orElse(false);
     }

@@ -40,8 +40,9 @@ public class comic {
     //GemMint (GM), NearMintMint (NMM), NearMint (NM)
     //VeryFine (VF), Fine (FN), VeryGood(VG),
     //Good(GD) y FairRegular(FR)
+    @Embedded
     @Column(name = "grading") // Estado del comic
-    private String grading;
+    private grading grading;
 
     @Column(name = "traderId") //id del proveedor
     private long traderId;

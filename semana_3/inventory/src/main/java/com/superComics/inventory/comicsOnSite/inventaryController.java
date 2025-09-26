@@ -82,7 +82,7 @@ public class inventaryController {
             @RequestParam double estimatedValue,
             @RequestParam Integer currentStock,
             @RequestParam Integer minimalStock,
-            @RequestParam String grading,
+            @RequestParam grading grading,
             @RequestParam Long traderId){
         comic newComic = inventoryService.newComic(id, sku, title, issueNumber, publisher,
                 estimatedValue, currentStock,
@@ -106,6 +106,20 @@ public class inventaryController {
             @RequestParam int number){
         inventoryService.plusStocks(id, number);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/updateGrading")
+    public ResponseEntity<comic>  updateGrading(
+            @PathVariable Long id,
+            @RequestBody gradingUpdateDTO updateDTO){
+
+        try{
+            comic updatedComic = inventoryService.updateGrading(
+                     id, updateDTO.getNewGradingCode());
+            return new ResponseEntity<>(updatedComic, HttpStatus.OK);
+        } catch (IllegalArgumentException e ){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

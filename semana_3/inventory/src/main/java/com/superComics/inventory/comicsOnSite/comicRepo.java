@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface onSiteRepo extends JpaRepository<comic, Long>{
+public interface comicRepo extends JpaRepository<comic, Long>{
 
 
     List<comic> findAllByPublisher(String publisher);
