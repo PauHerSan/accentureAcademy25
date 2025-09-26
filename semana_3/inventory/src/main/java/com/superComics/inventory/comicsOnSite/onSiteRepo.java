@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface onSiteRepo extends JpaRepository<comic, Long>{
 
-    List<comic> findByCurrentStockLessThanEqual(Integer minimalStock);
+
     List<comic> findAllByPublisher(String publisher);
+    List<comic> findByTitle(String title);
+
 
 
 
