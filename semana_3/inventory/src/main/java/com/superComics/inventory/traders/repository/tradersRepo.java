@@ -1,5 +1,6 @@
-package com.superComics.inventory.traders;
+package com.superComics.inventory.traders.repository;
 
+import com.superComics.inventory.traders.model.traders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

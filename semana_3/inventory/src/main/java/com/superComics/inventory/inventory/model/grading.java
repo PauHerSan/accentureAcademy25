@@ -1,4 +1,4 @@
-package com.superComics.inventory.comicsOnSite;
+package com.superComics.inventory.inventory.model;
 
 import jakarta.persistence.Embeddable;
 

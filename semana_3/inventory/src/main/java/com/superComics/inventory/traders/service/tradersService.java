@@ -1,6 +1,7 @@
-package com.superComics.inventory.traders;
+package com.superComics.inventory.traders.service;
 
-import jakarta.transaction.Transactional;
+import com.superComics.inventory.traders.model.traders;
+import com.superComics.inventory.traders.repository.tradersRepo;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 

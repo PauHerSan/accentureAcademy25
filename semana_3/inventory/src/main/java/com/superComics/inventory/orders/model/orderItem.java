@@ -1,4 +1,4 @@
-package com.superComics.inventory.orders;
+package com.superComics.inventory.orders.model;
 
 import jakarta.persistence.*;
 import lombok.*;
