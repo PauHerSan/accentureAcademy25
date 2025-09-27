@@ -2,14 +2,13 @@ package com.superComics.inventory.inventory.api;
 
 
 import com.superComics.inventory.inventory.model.comic;
-import com.superComics.inventory.inventory.model.grading;
 import com.superComics.inventory.inventory.service.inventoryServices;
+import com.superComics.inventory.shared.comicCreationRequestDTO;
 import com.superComics.inventory.shared.gradingUpdateDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -29,6 +28,13 @@ public class inventaryController {
         return new ResponseEntity<>(comics, HttpStatus.OK);
     }
 
+    //Obtener cómic por ID.
+    @GetMapping("/{id}")
+    public ResponseEntity<comic> getComicsById(@PathVariable Long id){
+        comic comic = inventoryServices.getComicsById(id);
+        return ResponseEntity.ok(comic);
+    }
+
     //Ver si están disponibles
     @GetMapping("/{comicId}/avialable")
     public ResponseEntity<Boolean> verifyStock(
@@ -39,7 +45,7 @@ public class inventaryController {
     }
 
     //Ver si tienen stock bajo
-    @GetMapping("/lowStock")
+    @GetMapping("/low-stock")
     public ResponseEntity<List<comic>> getComicsWithLowStock(){
         List<comic> comics = inventoryServices.getComicsWithLowStock();
         return new ResponseEntity<>(comics, HttpStatus.OK);
@@ -49,9 +55,6 @@ public class inventaryController {
     @GetMapping("/by-title/{title}")
     public ResponseEntity<List<comic>> getComicsByTitle(@PathVariable String title){
         List<comic> comics = inventoryServices.getComicsByTitle(title);
-        if(title == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         return ResponseEntity.ok(comics);
     }
 
@@ -59,44 +62,33 @@ public class inventaryController {
     @GetMapping("/publisher/{publisher}")
     public ResponseEntity<List<comic>> getComicsByPublisher(@PathVariable String publisher){
         List<comic> comics = inventoryServices.getComicsByPublisher(publisher);
-        if(publisher == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         return ResponseEntity.ok(comics);
     }
 
-    //Obtener por Id
-    @GetMapping("/id/{id}")
-    public ResponseEntity<List<comic>> getComicsById(@PathVariable Long id){
-        List<comic> comics = Collections.singletonList(inventoryServices.getComicsById(id));
-        if(id == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return ResponseEntity.ok(comics);
-    }
 
-    //Crear un nuevo comic
+    //Crear un nuevo comic utilizandoDTO
     @PostMapping("/new-comic")
-    public ResponseEntity<comic>  newComic(
-            @RequestParam Long id,
-            @RequestParam String sku,
-            @RequestParam String title,
-            @RequestParam Integer issueNumber,
-            @RequestParam String publisher,
-            @RequestParam double estimatedValue,
-            @RequestParam Integer currentStock,
-            @RequestParam Integer minimalStock,
-            @RequestParam grading grading,
-            @RequestParam Long traderId){
-        comic newComic = inventoryServices.newComic(id, sku, title, issueNumber, publisher,
-                estimatedValue, currentStock,
-                minimalStock, grading, traderId);
-        return ResponseEntity.ok(newComic);
+    public ResponseEntity<comic>  newComic(@RequestBody comicCreationRequestDTO request) {
+
+        // Mapeo simple del DTO a los parámetros del servicio
+        comic newComic = inventoryServices.newComic(
+                null, // Dejamos el ID como null para que JPA lo genere
+                request.getSku(),
+                request.getTitle(),
+                request.getIssueNumber(),
+                request.getPublisher(),
+                request.getEstimatedValue(),
+                request.getCurrentStock(),
+                request.getMinimalStock(),
+                request.getGrading(),
+                request.getTraderId());
+
+        return new ResponseEntity<>(newComic, HttpStatus.CREATED);
     }
 
     //Reducir Stock
-    @PostMapping("/{id}/lowStock")
-    public ResponseEntity<comic>  lowStock(
+    @PostMapping("/{id}/reduce-stock")
+    public ResponseEntity<Void>  reduceStock(
             @PathVariable Long id,
             @RequestParam int number){
         inventoryServices.byeStocks(id, number);
@@ -104,8 +96,8 @@ public class inventaryController {
     }
 
     //Aumentar Stock
-    @PostMapping("/{id}/plusStock")
-    public ResponseEntity<comic>  plusStock(
+    @PostMapping("/{id}/increase-Stock")
+    public ResponseEntity<Void> increaseStock(
             @PathVariable Long id,
             @RequestParam int number){
         inventoryServices.plusStocks(id, number);
@@ -117,13 +109,9 @@ public class inventaryController {
             @PathVariable Long id,
             @RequestBody gradingUpdateDTO updateDTO){
 
-        try{
-            comic updatedComic = inventoryServices.updateGrading(
-                     id, updateDTO.getNewGradingCode());
-            return new ResponseEntity<>(updatedComic, HttpStatus.OK);
-        } catch (IllegalArgumentException e ){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        comic updatedComic = inventoryServices.updateGrading(
+                id, updateDTO.getNewGradingCode());
+        return new ResponseEntity<>(updatedComic, HttpStatus.OK);
     }
 
 }

@@ -1,0 +1,55 @@
+com.tiendacomics.app (Paquete Raíz de la Aplicación)
+├── InventoryApplication.java (Clase principal de Spring Boot)
+├── inventory
+│   ├── model
+│   │   ├── ComicItem.java (Entidad JPA)
+│   │   └── Grading.java (Objeto para estado físico)
+│   ├── repository
+│   │   └── ComicItemRepository.java (Interfaz Spring Data JPA)
+│   ├── service
+│   │   ├── InventoryService.java (Interfaz)
+│   │   └── InventoryServiceImpl.java (Implementación, lógica de negocio)
+│   ├── api
+│   │   └── InventoryController.java (API REST)
+│   ├── events
+│        ├── ComicAddedEvent.java (Evento de dominio - nuevo cómic)
+│        ├── StockQuantityUpdatedEvent.java (Evento de dominio - stock actualizado)
+│        ├── GradingUpdatedEvent.java (Evento de dominio - grading actualizado)
+│        └── LowStockAlertEvent.java (Evento de dominio - stock bajo)
+├── traders
+│   ├── model
+│   │   └── Trader.java (Entidad JPA)
+│   ├── repository
+│   │   └── TraderRepository.java
+│   ├── service
+│   │   └── TraderService.java (Interfaz, lógica de negocio)
+│   └── api
+│       └── TraderController.java
+├── orders
+│   ├── model
+│   │   ├── Order.java (Entidad JPA)
+│   │   └── OrderItem.java (Entidad JPA)
+│   ├── repository
+│   │   ├── OrderRepository.java
+│   │   └── OrderItemRepository.java
+│   ├── service
+│   │   ├── OrderService.java (Interfaz, lógica de negocio)
+│   │   └── OrderCreation.java (Clase de soporte para lógica compleja)
+│   ├── api
+│   │   └── OrderController.java
+│   └── events
+│       └── OrderCompletedEvent.java (Evento de dominio - orden completada)
+├── notifications
+│   └── service
+│       └── NotificationService.java (Interfaz, escucha de eventos)
+├── shared
+│   ├── exception
+│   │   ├── GlobalExceptionHandler.java (Manejador global de excepciones)
+│   │   ├── ComicNotFoundException.java (Excepción específica)
+│   │   └── BusinessException.java (Excepción de negocio)
+│   └── dto
+│       └── ResponseWrapper.java (DTO para respuestas estandarizadas)
+└── config
+    ├── DatabaseConfig.java (Configuración de BD)
+    ├── ModulithConfig.java (Configuración Spring Modulith)
+    └── OpenApiConfig.java (Configuración Swagger/OpenAPI)

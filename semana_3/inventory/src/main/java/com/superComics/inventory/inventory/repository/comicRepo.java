@@ -11,7 +11,4 @@ public interface comicRepo extends JpaRepository<comic, Long>{
     List<comic> findAllByPublisher(String publisher);
     List<comic> findByTitle(String title);
 
-
-
-
 }

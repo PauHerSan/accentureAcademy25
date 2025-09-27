@@ -1,9 +1,11 @@
 package com.superComics.inventory.inventory.service;
 
+import com.superComics.inventory.inventory.events.gradingUpdatedEvent;
+import com.superComics.inventory.inventory.events.lowStockAlertEvent;
 import com.superComics.inventory.inventory.model.comic;
 import com.superComics.inventory.inventory.model.grading;
 import com.superComics.inventory.inventory.repository.comicRepo;
-import com.superComics.inventory.shared.lowStock;
+import com.superComics.inventory.notifications.notificationService;
 import jakarta.transaction.Transactional;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,12 @@ public class inventoryServiceImpl implements inventoryServices {
 
     private final comicRepo comicRepo;
     private final ApplicationEventPublisher eventPublisher;
+    private final notificationService notificarionService;
 
-    public inventoryServiceImpl(comicRepo comicRepo, ApplicationEventPublisher eventPublisher) {
+    public inventoryServiceImpl(comicRepo comicRepo, ApplicationEventPublisher eventPublisher, notificationService notificarionService) {
         this.comicRepo = comicRepo;
         this.eventPublisher = eventPublisher;
+        this.notificarionService = notificarionService;
     }
 
     //Crear un nuevo comic
@@ -34,18 +38,25 @@ public class inventoryServiceImpl implements inventoryServices {
     @Override
     public comic updateGrading(Long comicId, String newGradingCode) {
 
-        grading newGrading = new grading(newGradingCode);
+        grading newGrading = new grading(newGradingCode); // Uso del Value Object con validación
 
         comic comic = comicRepo.findById(comicId)
-                .orElseThrow(() -> new RuntimeException("comic no encontrado"));
+                // Usando tu excepción compartida
+                .orElseThrow(() -> new ComicNotFoundException("Cómic con ID " + comicId + " no encontrado."));
 
+        grading oldGrading = comic.getGrading();
+
+        // 1. Aplicar lógica de negocio (cambio de estado)
         comic.setGrading(newGrading);
         comic updatedComic = comicRepo.save(comic);
 
-        events.publishEvent(new GradingUpdated(
+        // 2. Publicar Evento de Dominio (CORREGIDO)
+        eventPublisher.publishEvent(new gradingUpdatedEvent(
                 updatedComic.getId(),
                 updatedComic.getSku(),
-                newGradingCode));
+                oldGrading.getCode(),
+                newGrading.getCode()
+        ));
 
         return updatedComic;
     }
@@ -61,7 +72,7 @@ public class inventoryServiceImpl implements inventoryServices {
         comicRepo.save(Comic);
 
         if(Comic.needRestock()){
-            lowStock lowStock = new lowStock(Comic.getId(), Comic.getTitle(),
+            lowStockAlertEvent lowStock = new lowStockAlertEvent(Comic.getId(), Comic.getTitle(),
                     Comic.getCurrentStock(), Comic.getMinimalStock());
             eventPublisher.publishEvent(lowStock);
         }

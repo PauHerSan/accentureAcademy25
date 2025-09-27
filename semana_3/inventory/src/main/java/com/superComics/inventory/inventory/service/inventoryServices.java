@@ -2,7 +2,7 @@ package com.superComics.inventory.inventory.service;
 
 import com.superComics.inventory.inventory.model.comic;
 import com.superComics.inventory.inventory.model.grading;
-import jakarta.transaction.Transactional;
+
 
 import java.util.List;
 
