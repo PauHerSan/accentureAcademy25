@@ -6,19 +6,17 @@ import lombok.Value;
 
 import java.time.Instant;
 
-//se publica cuando la cantidad de stock de un cómic se ha modificado.
+//Se publica cuando un nuevo cómic ha sido agregado al inventario.
 @Value
 @Builder
-public class stockQuantityUpdatedEvent {
+public class comicAddedEvent {
 
     Long comicId;
     String sku;
-    int oldStock;
-    int newStock;
-    int changeQuantity;
+    String title;
+    String publisher;
+    int currentStock;
 
     @Builder.Default
     Instant timestamp = Instant.now();
-
-
 }

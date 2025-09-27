@@ -1,21 +1,21 @@
 package com.superComics.inventory.inventory.events;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.Instant;
 
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
+@Value
+@Builder
 public class lowStockAlertEvent {
 
-    private Long id;
-    private String title;
-    private Integer currentStock;
-    private Integer minimalStock;
+    Long comicId;
+    String title;
+    int currentStock;
+    int minimalStock;
+
+    @Builder.Default
+    Instant timestamp = Instant.now();
 
 
 }
