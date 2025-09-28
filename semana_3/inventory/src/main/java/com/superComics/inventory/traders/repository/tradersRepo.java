@@ -5,13 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface tradersRepo extends JpaRepository<traders, Long> {
 
-    List<traders> findByName(String name);
-    List<traders> findByUsualPrice(double price);
-    List<traders> findByEmail(String email);
-    List<traders> findBySpeciality(String speciality);
+    Optional<traders> findByContactEmail(String contactEmail);
+    List<traders> findAllByIsActiveTrue();
 
 }

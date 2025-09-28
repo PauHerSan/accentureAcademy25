@@ -1,18 +1,17 @@
 package com.superComics.inventory.notifications;
 
+import com.superComics.inventory.inventory.events.gradingUpdatedEvent;
 import com.superComics.inventory.inventory.events.lowStockAlertEvent;
-import org.springframework.modulith.events.ApplicationModuleListener;
-import org.springframework.stereotype.Component;
+import com.superComics.inventory.inventory.events.stockQuantityUpdatedEvent;
 
-@Component
-public class notificationService {
 
-    @ApplicationModuleListener
-    void notifyLowStock(lowStockAlertEvent lowStock) {
-        System.out.println("⚠️ ALERTA: Stock bajo detectado!");
-        System.out.println("   Producto: " + lowStock.getTitle());
-        System.out.println("   Stock actual: " + lowStock.getCurrentStock());
-        System.out.println("   Stock mínimo: " + lowStock.getMinimalStock());
-    }
+public interface notificationService {
+
+
+    void handleLowStockAlert(lowStockAlertEvent event);
+
+    void handleGradingUpdate(gradingUpdatedEvent event);
+
+    void handleStockQuantityUpdate(stockQuantityUpdatedEvent event);
 
 }

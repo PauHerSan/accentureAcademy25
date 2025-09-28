@@ -8,6 +8,8 @@ import com.superComics.inventory.inventory.model.comicItem;
 import com.superComics.inventory.inventory.model.grading;
 import com.superComics.inventory.inventory.repository.comicRepo;
 import com.superComics.inventory.notifications.notificationService;
+import com.superComics.inventory.shared.BusinessException;
+import com.superComics.inventory.shared.ComicNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -57,7 +59,7 @@ public class inventoryServiceImpl implements inventoryServices {
 
         comicItem comic = comicRepo.findById(comicId)
                 // Usando tu excepción compartida
-                .orElseThrow(() -> new ComicNotFoundException("Cómic con ID " + comicId + " no encontrado."));
+                .orElseThrow(() -> new BusinessException("Cómic con ID " + comicId + " no encontrado."));
 
         grading oldGrading = comic.getGrading();
 
@@ -81,7 +83,7 @@ public class inventoryServiceImpl implements inventoryServices {
     @Override
     public void byeStocks(Long comicId, int number){
         comicItem item = comicRepo.findById(comicId)
-                .orElseThrow(()-> new ComicNotFoundException("Cómic con ID " + comicId + " no encontrado."));
+                .orElseThrow(()-> new BusinessException("Cómic con ID " + comicId + " no encontrado."));
 
         int oldStock = item.getCurrentStock();
 
@@ -117,7 +119,7 @@ public class inventoryServiceImpl implements inventoryServices {
     @Override
     public void plusStocks(Long comicId, int number){
         comicItem Comic =  comicRepo.findById(comicId)
-                .orElseThrow(()-> new ComicNotFoundException("Cómic con ID " + comicId + " no encontrado."));
+                .orElseThrow(()-> new BusinessException("Cómic con ID " + comicId + " no encontrado."));
 
         int oldStock = Comic.getCurrentStock(); // Stock antes de la operación
 
@@ -146,7 +148,7 @@ public class inventoryServiceImpl implements inventoryServices {
     //Obtener comic por id
     @Override
     public comicItem getComicsById(Long comicId){
-        return comicRepo.findById(comicId).orElseThrow(()-> new IllegalArgumentException("Cómic no encontrado: " + comicId));
+        return comicRepo.findById(comicId).orElseThrow(()-> new ComicNotFoundException("Cómic no encontrado: " + comicId));
     }
 
     //Obtener comic con bajo stock

@@ -10,7 +10,7 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name="orders")
+@Table(name="traders")
 public class traders {
 
     @Id
@@ -18,20 +18,21 @@ public class traders {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name",  nullable = false)
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email",  nullable = false)
     private String email;
 
     @Column(name = "speciality")
     private String speciality;
 
-    @Column(name = "usualPrice+-")
+    @Column(name = "usual_price_variance")
     private double usualPrice;
 
     @Column(name = "address")
     private String address;
 
-
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive = true;
 }
