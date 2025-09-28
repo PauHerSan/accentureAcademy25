@@ -1,93 +1,118 @@
 package com.info_anime.anime_fullPrograms.rest;
 
 import com.info_anime.anime_fullPrograms.model.animeModel;
-import com.info_anime.anime_fullPrograms.repository.animeRepo;
+import com.info_anime.anime_fullPrograms.service.animeServiceImplements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
-@RequestMapping("/api/animeModel")
+@RequestMapping("/api/anime")
 public class animeRest {
 
     @Autowired
-    private animeRepo animeRepo;
+    private animeServiceImplements animeService;
 
-    //Todos los animes
+    // Obtener todos los animes
     @GetMapping
-    public List<animeModel> getanimeModels() {
-        return animeRepo.findAll();
+    public ResponseEntity<List<animeModel>> getAllAnimes() {
+        try {
+            List<animeModel> animes = animeService.getAllAnimes();
+            return ResponseEntity.ok(animes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-
-    //Animes por id
+    // Obtener anime por ID
     @GetMapping("/{id}")
-    public ResponseEntity<animeModel> getanimeModelById(@PathVariable String id) {
-        return animeRepo.findById(id)
-                .map(animeModel -> ResponseEntity.ok().body(animeModel))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<animeModel> getAnimeById(@PathVariable String id) {
+        try {
+            return animeService.getAnimeById(id)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
-    //Animes por título
+    // Obtener animes por título
     @GetMapping("/titulo/{titulo}")
-    public ResponseEntity<List<animeModel>> getanimeModelsByTitulo(@PathVariable String titulo) {
-        List<animeModel> list = animeRepo.findByTituloContainingIgnoreCase(titulo);
-        if (list.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<List<animeModel>> getAnimesByTitulo(@PathVariable String titulo) {
+        try {
+            List<animeModel> animes = animeService.getAnimesByTitulo(titulo);
+            if (animes.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(animes);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        else {
-            return ResponseEntity.ok().body(list);
+    }
+
+    // Crear un nuevo anime
+    @PostMapping
+    public ResponseEntity<?> createAnime(@RequestBody animeModel anime) {
+        try {
+            animeModel nuevoAnime = animeService.createAnime(anime);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoAnime);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error interno del servidor");
         }
     }
 
-    //Crear un nuevo anime
-    @PostMapping("/newAnime")
-    public ResponseEntity<animeModel> createanimeModel(@RequestBody animeModel anime) {
-        animeModel nuevoAnime = animeRepo.save(anime);
-        return new ResponseEntity<>(nuevoAnime, HttpStatus.CREATED);
-    }
-
-    //Actualizar un nuevo anime por id
-    @PutMapping ("/newAnime/{id}")
-    public ResponseEntity<animeModel> updateAnime(@PathVariable String id, @RequestBody animeModel animeDetails) {
-        return animeRepo.findById(id)
-                .map(anime -> {
-                    anime.setTitulo(animeDetails.getTitulo());
-                    anime.setEscritor(animeDetails.getEscritor());
-                    anime.setDirector(animeDetails.getDirector());
-                    anime.setAnoLanzamiento(animeDetails.getAnoLanzamiento());
-                    anime.setNumeroCapitulos(animeDetails.getNumeroCapitulos());
-                    anime.setGenero(animeDetails.getGenero());
-                    animeModel animeActualizado = animeRepo.save(anime);
-                    return ResponseEntity.ok().body(animeActualizado);
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-
-    //Eliminar animes por nombre
-    @DeleteMapping("/bye/titulo/{titulo}")
-    public ResponseEntity<Void> deleteByTitulo(@PathVariable String titulo) {
-        List<animeModel> animesToDelete = animeRepo.findByTituloContainingIgnoreCase(titulo);
-        if(animesToDelete.isEmpty()){
-            return ResponseEntity.notFound().build();
+    // Actualizar anime por ID
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateAnime(@PathVariable String id, @RequestBody animeModel animeDetails) {
+        try {
+            return animeService.updateAnime(id, animeDetails)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error interno del servidor");
         }
-        animeRepo.deleteAll(animesToDelete);
-        return ResponseEntity.ok().build();
     }
 
-    //Eliminar anime por ID
-    @DeleteMapping("/bye/{id}")
-    public ResponseEntity<Void> deleteAnime(@PathVariable String id) {
-        if (animeRepo.existsById(id)) {
-            animeRepo.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
+    // Eliminar anime por ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAnime(@PathVariable String id) {
+        try {
+            if (animeService.deleteAnimeById(id)) {
+                return ResponseEntity.ok("Anime eliminado exitosamente");
+            }
             return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno del servidor");
+        }
+    }
+
+    // Eliminar animes por título
+    @DeleteMapping("/titulo/{titulo}")
+    public ResponseEntity<String> deleteAnimesByTitulo(@PathVariable String titulo) {
+        try {
+            int deletedCount = animeService.deleteAnimesByTitulo(titulo);
+            if (deletedCount == 0) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok("Se eliminaron " + deletedCount + " anime(s)");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error interno del servidor");
         }
     }
 

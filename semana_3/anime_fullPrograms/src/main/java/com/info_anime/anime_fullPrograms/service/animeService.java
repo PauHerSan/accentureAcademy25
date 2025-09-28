@@ -11,10 +11,10 @@ public interface animeService {
     List<animeModel> getAllAnimes();
     Optional<animeModel> getAnimeById(String id);
     animeModel createAnime(animeModel anime);
-    animeModel updateAnime(String id, animeModel animeDetails);
+    Optional<animeModel> updateAnime(String id, animeModel animeDetails);
     boolean deleteAnimeById(String id);
 
     List<animeModel> getAnimesByTitulo(String titulo);
-    boolean deleteAnimesByTitulo(String titulo);
+    int deleteAnimesByTitulo(String titulo);
 
 }
