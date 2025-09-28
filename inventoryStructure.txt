@@ -12,7 +12,7 @@ com.tiendacomics.app (Paquete Raíz de la Aplicación)
 │   ├── api
 │   │   └── InventoryController.java (API REST)
 │   ├── events
-│        ├── ComicAddedEvent.java (Evento de dominio - nuevo cómic)
+│        ├── ComicAddedEvent.java (Evento de dominio - nuevo cómic) 
 │        ├── StockQuantityUpdatedEvent.java (Evento de dominio - stock actualizado)
 │        ├── GradingUpdatedEvent.java (Evento de dominio - grading actualizado)
 │        └── LowStockAlertEvent.java (Evento de dominio - stock bajo)
