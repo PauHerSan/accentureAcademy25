@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface tradersRepo extends JpaRepository<traders, Long> {
 
-    Optional<traders> findByContactEmail(String contactEmail);
+    Optional<traders> findByEmail(String email);
     List<traders> findAllByIsActiveTrue();
 
 }

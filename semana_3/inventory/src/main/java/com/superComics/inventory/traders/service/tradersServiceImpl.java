@@ -24,7 +24,7 @@ public class tradersServiceImpl implements traderService {
     @Override
     public traders createNewTrader(String name, String email, String speciality, double usualPrice, String address) {
 
-        if (tradersRepo.findByContactEmail(email).isPresent()) {
+        if (tradersRepo.findByEmail(email).isPresent()) {
             throw new BusinessException("Ya existe un Trader registrado con este email.");
        }
         traders newTrader = new traders(null, name, email, speciality, usualPrice, address, true);
