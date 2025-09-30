@@ -7,11 +7,11 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = {
-        "com.proyecto.banco.customer.repository.customerRepo",
-        "com.proyecto.banco.account.repository.accountRepo"
+        "com.proyecto.banco.customer.repository",
+        "com.proyecto.banco.account.repository"
 })
 @EnableMongoRepositories(basePackages = {
-        "com.proyecto.banco.notification.notificationRepo"
+        "com.proyecto.banco.notification.repository"
 })
 public class BancoApplication {
 
