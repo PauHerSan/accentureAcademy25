@@ -1,4 +1,4 @@
-package com.superComics.inventory.notifications;
+package com.superComics.inventory.notifications.service;
 
 import com.superComics.inventory.inventory.events.gradingUpdatedEvent;
 import com.superComics.inventory.inventory.events.lowStockAlertEvent;

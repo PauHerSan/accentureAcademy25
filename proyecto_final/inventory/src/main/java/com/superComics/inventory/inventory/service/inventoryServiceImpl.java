@@ -7,7 +7,7 @@ import com.superComics.inventory.inventory.events.stockQuantityUpdatedEvent;
 import com.superComics.inventory.inventory.model.comicItem;
 import com.superComics.inventory.inventory.model.grading;
 import com.superComics.inventory.inventory.repository.comicRepo;
-import com.superComics.inventory.notifications.notificationService;
+import com.superComics.inventory.notifications.service.notificationService;
 import com.superComics.inventory.shared.BusinessException;
 import com.superComics.inventory.shared.ComicNotFoundException;
 import jakarta.transaction.Transactional;
