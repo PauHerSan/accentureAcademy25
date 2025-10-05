@@ -6,11 +6,10 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name="comics")
 public class comicItem {
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "id")

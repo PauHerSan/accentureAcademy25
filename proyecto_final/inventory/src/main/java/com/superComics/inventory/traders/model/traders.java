@@ -7,8 +7,6 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name="traders")
 public class traders {
