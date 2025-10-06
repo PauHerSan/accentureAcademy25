@@ -13,6 +13,8 @@ import com.superComics.inventory.shared.ComicNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
@@ -23,10 +25,14 @@ import static org.mockito.Mockito.*;
 
 public class InventoryServiceIplmTest {
 
+    @Mock
     private comicRepo comicRepo;
+
+    @InjectMocks
+    private inventoryServiceImpl inventoryService;
+
     private ApplicationEventPublisher eventPublisher;
     private notificationService notificationService;
-    private inventoryServiceImpl inventoryService;
     private comicItem mockComic;
 
     @BeforeEach
