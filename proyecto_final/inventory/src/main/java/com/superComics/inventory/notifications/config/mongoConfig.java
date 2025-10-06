@@ -1,4 +1,4 @@
-package com.superComics.inventory.config;
+package com.superComics.inventory.notifications.config;
 
 
 import org.springframework.context.annotation.Configuration;
